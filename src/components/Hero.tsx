@@ -1,11 +1,12 @@
 import { motion } from 'motion/react';
-import { ArrowRight, Scan, ShieldCheck, Zap, Activity, CheckCircle, Sparkles } from 'lucide-react';
+import { ArrowRight, Scan, ShieldCheck, Zap, Activity, CheckCircle, Sparkles, Camera } from 'lucide-react';
 
 interface HeroProps {
   onScanClick: () => void;
+  onDirectCameraClick?: () => void;
 }
 
-export const Hero = ({ onScanClick }: HeroProps) => {
+export const Hero = ({ onScanClick, onDirectCameraClick }: HeroProps) => {
   return (
     <section className="relative min-h-[92vh] pt-28 pb-16 flex items-center justify-center overflow-hidden bg-gradient-to-b from-emerald-50/70 via-white to-slate-50">
       {/* Background Decorative Gradients & Grid */}
@@ -72,21 +73,30 @@ export const Hero = ({ onScanClick }: HeroProps) => {
               className="flex flex-wrap items-center justify-center lg:justify-start gap-4 pt-2"
             >
               <button
-                onClick={onScanClick}
-                id="hero-try-scanner-cta"
-                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-semibold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-lg shadow-emerald-600/25 hover:shadow-emerald-600/35 transition-all duration-200 active:scale-95 group text-base"
+                onClick={onDirectCameraClick || onScanClick}
+                id="hero-direct-camera-cta"
+                className="inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-xl font-bold text-white bg-gradient-to-r from-emerald-600 via-emerald-500 to-lime-600 hover:from-emerald-700 hover:to-lime-700 shadow-lg shadow-emerald-600/30 hover:shadow-emerald-600/40 transition-all duration-200 active:scale-95 group text-base"
               >
-                <Scan className="w-5 h-5 group-hover:rotate-12 transition-transform" />
-                <span>Try AI Scanner</span>
+                <Camera className="w-5 h-5 group-hover:scale-110 transition-transform" />
+                <span>Open Live Camera & Scan</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
               </button>
 
-              <a
-                href="#how-it-works"
-                id="hero-learn-more-cta"
-                className="inline-flex items-center justify-center gap-2 px-6 py-3.5 rounded-xl font-semibold text-slate-700 bg-white hover:bg-slate-50 border border-slate-200/90 shadow-sm hover:border-slate-300 transition-all duration-200 active:scale-95 text-base"
+              <button
+                onClick={onScanClick}
+                id="hero-try-scanner-cta"
+                className="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl font-semibold text-slate-800 bg-white hover:bg-slate-50 border border-slate-300 shadow-sm transition-all duration-200 active:scale-95 text-base"
               >
-                <span>Learn More</span>
+                <Scan className="w-4 h-4 text-emerald-600" />
+                <span>Upload / Presets</span>
+              </button>
+
+              <a
+                href="#dashboard"
+                id="hero-dashboard-cta"
+                className="inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl font-semibold text-emerald-800 bg-emerald-50 hover:bg-emerald-100 border border-emerald-200 shadow-xs transition-all duration-200 active:scale-95 text-sm"
+              >
+                <span>🌦️ Farmer Dashboard</span>
               </a>
             </motion.div>
 

@@ -15,6 +15,7 @@ import { ToastContainer, ToastMessage } from './components/Toast';
 import { AuthModal } from './components/AuthModal';
 import { UserProfileModal } from './components/UserProfileModal';
 import { LoginPage } from './components/LoginPage';
+import { FarmerDashboard } from './components/FarmerDashboard';
 import { UserProfile } from './types';
 
 export default function App() {
@@ -25,6 +26,7 @@ export default function App() {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [authModalMode, setAuthModalMode] = useState<'signin' | 'signup'>('signin');
   const [profileModalOpen, setProfileModalOpen] = useState(false);
+  const [autoStartCamera, setAutoStartCamera] = useState(false);
 
   // Load persisted user from localStorage if available
   useEffect(() => {
@@ -56,6 +58,19 @@ export default function App() {
       scannerElement.scrollIntoView({ behavior: 'smooth' });
     }
   }, []);
+
+  // Direct Live Screen Camera Scan Handler for New or Returning Users
+  const handleDirectCameraScan = useCallback(() => {
+    setCurrentView('home');
+    setAutoStartCamera(true);
+    setTimeout(() => {
+      const scannerElement = document.getElementById('scanner');
+      if (scannerElement) {
+        scannerElement.scrollIntoView({ behavior: 'smooth' });
+      }
+    }, 120);
+    showToast('info', 'Starting Camera...', 'कैमरा शुरू हो रहा है... फसल की पत्ती को बॉक्स में रखें');
+  }, [showToast]);
 
   const handleOpenAuthModal = (mode: 'signin' | 'signup') => {
     setAuthModalMode(mode);
@@ -110,6 +125,7 @@ export default function App() {
               currentUser={currentUser}
               onLoginSuccess={handleLoginSuccess}
               onExploreGuest={handleExploreGuest}
+              onDirectCameraScan={handleDirectCameraScan}
               onShowToast={showToast}
             />
           </motion.div>
@@ -144,6 +160,7 @@ export default function App() {
             {/* Sticky Navigation Bar with Auth Integration & Go to Login Page */}
             <Navbar
               onScanClick={scrollToScanner}
+              onDirectCameraClick={handleDirectCameraScan}
               user={currentUser}
               onOpenAuth={handleOpenAuthModal}
               onOpenProfile={() => setProfileModalOpen(true)}
@@ -153,12 +170,26 @@ export default function App() {
             {/* Main Page Layout */}
             <main className="flex-1">
               {/* 1. Hero Section */}
-              <Hero onScanClick={scrollToScanner} />
+              <Hero
+                onScanClick={scrollToScanner}
+                onDirectCameraClick={handleDirectCameraScan}
+              />
 
               {/* 2. Interactive AI Crop Scanner */}
-              <ScannerSection onShowToast={showToast} />
+              <ScannerSection
+                onShowToast={showToast}
+                autoStartCamera={autoStartCamera}
+                onCameraStarted={() => setAutoStartCamera(false)}
+              />
 
-              {/* 3. Why FarmerDetect */}
+              {/* 3. Farmer Intelligence Dashboard */}
+              <FarmerDashboard
+                user={currentUser}
+                onScanClick={scrollToScanner}
+                onShowToast={showToast}
+              />
+
+              {/* 4. Why FarmerDetect */}
               <WhyFarmerDetect />
 
               {/* 4. Crop Knowledge Base */}

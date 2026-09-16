@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
-import { Sprout, Menu, X, ArrowRight, ShieldCheck, User, LogIn, UserPlus } from 'lucide-react';
+import { Sprout, Menu, X, ArrowRight, ShieldCheck, User, LogIn, UserPlus, Camera } from 'lucide-react';
 import { UserProfile } from '../types';
 
 interface NavbarProps {
   onScanClick: () => void;
+  onDirectCameraClick?: () => void;
   user: UserProfile | null;
   onOpenAuth: (mode: 'signin' | 'signup') => void;
   onOpenProfile: () => void;
   onGoToLogin?: () => void;
 }
 
-export const Navbar = ({ onScanClick, user, onOpenAuth, onOpenProfile, onGoToLogin }: NavbarProps) => {
+export const Navbar = ({ onScanClick, onDirectCameraClick, user, onOpenAuth, onOpenProfile, onGoToLogin }: NavbarProps) => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -24,10 +25,8 @@ export const Navbar = ({ onScanClick, user, onOpenAuth, onOpenProfile, onGoToLog
 
   const navLinks = [
     { label: 'Scanner', href: '#scanner' },
-    { label: 'Why Us', href: '#why-farmerdetect' },
+    { label: 'Dashboard', href: '#dashboard' },
     { label: 'Knowledge Base', href: '#knowledge-base' },
-    { label: 'How It Works', href: '#how-it-works' },
-    { label: 'Architecture', href: '#architecture' },
     { label: 'Team', href: '#team' },
     { label: 'FAQ', href: '#faq' },
     { label: 'Contact', href: '#contact' },
@@ -120,11 +119,21 @@ export const Navbar = ({ onScanClick, user, onOpenAuth, onOpenProfile, onGoToLog
             </div>
           )}
 
+          {/* Direct Live Screen Camera Launch Button */}
+          <button
+            onClick={onDirectCameraClick || onScanClick}
+            id="nav-direct-camera-btn"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-emerald-950 bg-emerald-100/90 hover:bg-emerald-200 border border-emerald-300 shadow-xs transition-all duration-200 active:scale-95"
+          >
+            <Camera className="w-3.5 h-3.5 text-emerald-700" />
+            <span>Live Screen Scan</span>
+          </button>
+
           {/* Try AI Scanner Launch Button */}
           <button
             onClick={onScanClick}
             id="nav-try-scanner-btn"
-            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-sm shadow-emerald-600/25 transition-all duration-200 active:scale-95"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-emerald-500 hover:from-emerald-700 hover:to-emerald-600 shadow-sm shadow-emerald-600/25 transition-all duration-200 active:scale-95"
           >
             <span>Launch Scanner</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -222,16 +231,28 @@ export const Navbar = ({ onScanClick, user, onOpenAuth, onOpenProfile, onGoToLog
             ))}
           </div>
 
-          <div className="pt-2 border-t border-slate-100">
+          <div className="pt-2 border-t border-slate-100 space-y-2">
+            <button
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onDirectCameraClick) onDirectCameraClick();
+                else onScanClick();
+              }}
+              className="w-full flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-lime-600 shadow-md shadow-emerald-600/20"
+            >
+              <Camera className="w-4 h-4" />
+              <span>📸 Direct Screen Camera Scan</span>
+            </button>
+
             <button
               onClick={() => {
                 setMobileMenuOpen(false);
                 onScanClick();
               }}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-lime-600 shadow-md shadow-emerald-600/20"
+              className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl text-xs font-semibold text-slate-700 bg-slate-100 hover:bg-slate-200 transition"
             >
-              <span>Launch AI Crop Scanner</span>
-              <ArrowRight className="w-4 h-4" />
+              <span>Browse Samples / Field Upload</span>
+              <ArrowRight className="w-3.5 h-3.5" />
             </button>
           </div>
         </div>

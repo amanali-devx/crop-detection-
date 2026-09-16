@@ -1,5 +1,6 @@
 export interface PredictionResult {
   id: string;
+  isCropImage?: boolean;
   cropName: string;
   diseaseName: string;
   scientificName: string;
@@ -16,6 +17,7 @@ export interface PredictionResult {
   };
   cropHealthScore: number; // 0-100
   spreadRisk: 'Low' | 'Medium' | 'High';
+  rejectionReason?: string;
 }
 
 export interface SampleLeaf {

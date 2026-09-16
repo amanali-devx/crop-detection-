@@ -16,6 +16,7 @@ import {
   LogIn,
   KeyRound,
   Globe,
+  Camera,
 } from 'lucide-react';
 import { UserProfile } from '../types';
 import {
@@ -28,6 +29,7 @@ interface LoginPageProps {
   currentUser?: UserProfile | null;
   onLoginSuccess: (user: UserProfile) => void;
   onExploreGuest: () => void;
+  onDirectCameraScan?: () => void;
   onShowToast: (type: 'success' | 'error' | 'info', title: string, message: string) => void;
 }
 
@@ -35,6 +37,7 @@ export const LoginPage: React.FC<LoginPageProps> = ({
   currentUser,
   onLoginSuccess,
   onExploreGuest,
+  onDirectCameraScan,
   onShowToast,
 }) => {
   const [mode, setMode] = useState<'signin' | 'signup' | 'forgot'>('signin');
@@ -193,14 +196,29 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           </span>
         </div>
 
-        {/* Explore Guest Button */}
-        <button
-          onClick={onExploreGuest}
-          className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-800 transition"
-        >
-          <span>Explore as Guest</span>
-          <ArrowRight className="w-3.5 h-3.5" />
-        </button>
+        {/* Header Actions */}
+        <div className="flex items-center gap-2">
+          {/* Direct Camera Scan for New Farmers */}
+          <button
+            type="button"
+            onClick={onDirectCameraScan || onExploreGuest}
+            id="login-direct-camera-btn"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-xl text-xs font-bold text-white bg-gradient-to-r from-emerald-600 to-lime-600 hover:from-emerald-500 hover:to-lime-500 shadow-md shadow-emerald-500/25 transition active:scale-95"
+          >
+            <Camera className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Direct Screen Camera (सीधे कैमरा खोलें)</span>
+            <span className="sm:hidden">Camera Scan</span>
+          </button>
+
+          {/* Explore Guest Button */}
+          <button
+            onClick={onExploreGuest}
+            className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-semibold text-slate-300 hover:text-white bg-slate-900/80 hover:bg-slate-800 border border-slate-800 transition"
+          >
+            <span>Explore as Guest</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
+        </div>
       </header>
 
       {/* Centered Login / Sign Up Card (ONLY LOGIN, NO EXTRA SIDE CONTENT) */}
@@ -211,6 +229,31 @@ export const LoginPage: React.FC<LoginPageProps> = ({
           transition={{ duration: 0.25 }}
           className="w-full bg-white text-slate-900 rounded-3xl shadow-2xl border border-slate-200/80 p-6 sm:p-8 relative"
         >
+          {/* Direct Screen Camera Bypass Banner */}
+          <div className="mb-5 p-3 rounded-2xl bg-gradient-to-r from-emerald-50 to-lime-50 border border-emerald-300/80 flex items-center justify-between gap-3 shadow-xs">
+            <div className="flex items-center gap-2.5 min-w-0">
+              <div className="w-8 h-8 rounded-xl bg-emerald-600 text-white flex items-center justify-center shrink-0 shadow-sm shadow-emerald-600/30">
+                <Camera className="w-4 h-4" />
+              </div>
+              <div className="text-left min-w-0">
+                <div className="text-xs font-bold text-slate-900 truncate">
+                  बिना लॉगिन सीधे फसल जांचें
+                </div>
+                <div className="text-[11px] text-emerald-800 font-medium truncate">
+                  Direct Live Screen Camera Scan
+                </div>
+              </div>
+            </div>
+            <button
+              type="button"
+              onClick={onDirectCameraScan || onExploreGuest}
+              id="login-quick-camera-btn"
+              className="shrink-0 px-3 py-1.5 rounded-xl text-xs font-bold text-white bg-emerald-600 hover:bg-emerald-700 shadow-sm transition active:scale-95"
+            >
+              Open Camera
+            </button>
+          </div>
+
           {/* Brand & Heading */}
           <div className="text-center mb-6">
             <h1 className="text-2xl font-black text-slate-900 tracking-tight">
