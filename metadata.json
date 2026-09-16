@@ -1,0 +1,6 @@
+{
+  "name": "FarmerDetect - AI Crop Disease Detection",
+  "description": "Smart India Hackathon 2026 AI crop disease detection platform powered by MobileNetV2 and deep learning for instant diagnosis, health analysis, and treatment suggestions.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
